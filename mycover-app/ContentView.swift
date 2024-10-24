@@ -7,13 +7,10 @@ struct ContentView: View {
         ZStack {
             // Navegación
             if navigateToHome {
-                Home() // Vista a la que se navega después de 3 segundos
+                OnBoardingView() // Vista a la que se navega después de 3 segundos
             } else {
                 ZStack {
-                    
                     Text("Icono Logo")
-
-                
                 }
                 .onAppear {
                     // Navegar a Home después de 3 segundos
