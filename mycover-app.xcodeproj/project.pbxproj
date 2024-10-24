@@ -29,9 +29,22 @@
 		FB11E0E52CC8817A00B0E811 /* mycover-appUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "mycover-appUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		5DDE78CB2CCA32ED0098E426 /* Exceptions for "mycover-app" folder in "mycover-app" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = FB11E0CA2CC8817700B0E811 /* mycover-app */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FB11E0CD2CC8817700B0E811 /* mycover-app */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				5DDE78CB2CCA32ED0098E426 /* Exceptions for "mycover-app" folder in "mycover-app" target */,
+			);
 			path = "mycover-app";
 			sourceTree = "<group>";
 		};
@@ -399,6 +412,7 @@
 				DEVELOPMENT_TEAM = JCNQ7PD5N2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "mycover-app/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = myCover;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -410,7 +424,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "elvirodominguez.mycover-app";
+				PRODUCT_BUNDLE_IDENTIFIER = com.joelvargas.mycoverApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -429,6 +443,7 @@
 				DEVELOPMENT_TEAM = JCNQ7PD5N2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "mycover-app/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = myCover;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -440,7 +455,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "elvirodominguez.mycover-app";
+				PRODUCT_BUNDLE_IDENTIFIER = com.joelvargas.mycoverApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
