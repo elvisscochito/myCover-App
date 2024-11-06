@@ -33,14 +33,18 @@ struct NewTicketSheetView: View {
             Form {
                 TextField("Title", text: $title)
                 TextField("Headline", text: $headline)
-                DatePicker("Datetime", selection: $date)
-                ColorPicker("Background Color", selection: $backgroundColor)
-                ColorPicker("Text Color", selection: $textColor)
+//                DatePicker("Datetime", selection: $date)
+//                ColorPicker("Background Color", selection: $backgroundColor)
+//                ColorPicker("Text Color", selection: $textColor)
             }
             Image("Add_to_Apple_Wallet_badge")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 275)
+            Button(action: {}) {
+                Text("Create event")
+            }
+
         }
         
     }

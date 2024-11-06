@@ -13,7 +13,23 @@
 //  Created by Elviro Dominguez Soriano on 25/02/24.
 //
 
+//@State private var title = ""
+//@State private var headline = ""
+//@State private var date = Date.now
+//@State private var backgroundColor = Color.black
+//@State private var textColor = Color.white
+
 import Foundation
+
+func CreateTicket(lista: [TicketModel] ,title: String, headline: String/*,date,backgroundColor,textColor*/) ->  [TicketModel] {
+    var updatedList = lista
+    
+    let newTicket = TicketModel(title: title, headline: headline)
+    
+    updatedList.append(newTicket)
+    
+    return updatedList
+}
 
 struct TicketModel: Identifiable {
     let id = UUID()
