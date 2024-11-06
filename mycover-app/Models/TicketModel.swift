@@ -21,16 +21,6 @@
 
 import Foundation
 
-func CreateTicket(lista: [TicketModel] ,title: String, headline: String/*,date,backgroundColor,textColor*/) ->  [TicketModel] {
-    var updatedList = lista
-    
-    let newTicket = TicketModel(title: title, headline: headline)
-    
-    updatedList.append(newTicket)
-    
-    return updatedList
-}
-
 struct TicketModel: Identifiable {
     let id = UUID()
     var title: String
@@ -44,4 +34,11 @@ struct TicketModel: Identifiable {
         TicketModel(title: "Enterprise Event", headline: "Business meeting at the restaurant"),
         TicketModel(title: "Social Event", headline: "Party in the club")
     ]
+    
+    // static method
+    static func createTicket(lista: inout[TicketModel], title: String, headline: String) {
+        let newTicket = TicketModel(title: title, headline: headline)
+        // append created ticket to previous list
+        lista.append(newTicket)
+    }
 }

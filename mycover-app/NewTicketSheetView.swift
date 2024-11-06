@@ -17,11 +17,14 @@ import SwiftUI
 
 struct NewTicketSheetView: View {
     
+    @Binding var tickets: [TicketModel]
+    @Binding var isShowingSheet: Bool
+    
     @State private var title = ""
     @State private var headline = ""
-    @State private var date = Date.now
-    @State private var backgroundColor = Color.black
-    @State private var textColor = Color.white
+//    @State private var date = Date.now
+//    @State private var backgroundColor = Color.black
+//    @State private var textColor = Color.white
     
     var body: some View {
         VStack {
@@ -37,11 +40,19 @@ struct NewTicketSheetView: View {
 //                ColorPicker("Background Color", selection: $backgroundColor)
 //                ColorPicker("Text Color", selection: $textColor)
             }
-            Image("Add_to_Apple_Wallet_badge")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 275)
-            Button(action: {}) {
+//            Image("Add_to_Apple_Wallet_badge")
+//                .resizable()
+//                .aspectRatio(contentMode: .fit)
+//                .frame(width: 275)
+            Button(action: {
+                //let newTicket = TicketModel(title: title, headline: headline)
+                // append created ticket to previous list
+                // tickets.append(newTicket)
+                
+                // use static func to create and add the new ticket
+                TicketModel.createTicket(lista: &tickets, title: title, headline: headline)
+                isShowingSheet = false
+            }) {
                 Text("Create event")
             }
 
@@ -51,5 +62,8 @@ struct NewTicketSheetView: View {
 }
 
 #Preview {
-    NewTicketSheetView()
+    NewTicketSheetView(
+        tickets: .constant(TicketModel.sampleTickets),
+        isShowingSheet: .constant(true)
+    )
 }

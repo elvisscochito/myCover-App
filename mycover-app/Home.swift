@@ -10,7 +10,8 @@ struct Home: View {
         if searchTerm.isEmpty {
             return tickets
         } else {
-            return tickets.filter { $0.title.localizedCaseInsensitiveContains(searchTerm)}
+            return tickets.filter { $0.title.localizedCaseInsensitiveContains(searchTerm) || $0.headline.localizedCaseInsensitiveContains(searchTerm)
+            }
         }
     }
     
@@ -33,7 +34,8 @@ struct Home: View {
             .navigationTitle("Home")
             .searchable(text: $searchTerm, prompt: "Search for ticket name or code")
             .sheet(isPresented: $isShowingSheet, content: {
-                NewTicketSheetView()
+                // Pass bindling of tickets and isShowigSheet
+                NewTicketSheetView(tickets: $tickets, isShowingSheet: $isShowingSheet)
             })
         }
     }
