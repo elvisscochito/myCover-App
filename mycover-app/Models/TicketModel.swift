@@ -26,19 +26,23 @@ struct TicketModel: Identifiable {
     var title: String
     var headline: String
     
-    static var defaultTicket = TicketModel(title: "Title", headline: "Headline")
-    
-    static var sampleTickets: [TicketModel] = [
-        TicketModel(title: "Apple Event", headline: "Swift student challenge 2024"),
-        TicketModel(title: "Tec de Monterrey", headline: "Business Weeekend"),
-        TicketModel(title: "Enterprise Event", headline: "Business meeting at the restaurant"),
-        TicketModel(title: "Social Event", headline: "Party in the club")
-    ]
-    
-    // static method
-    static func createTicket(lista: inout[TicketModel], title: String, headline: String) {
-        let newTicket = TicketModel(title: title, headline: headline)
-        // append created ticket to previous list
-        lista.append(newTicket)
-    }
+//    static var defaultTicket = TicketModel(title: "Title", headline: "Headline")
+//    
+//    static var sampleTickets: [TicketModel] = [
+//        TicketModel(title: "Apple Event", headline: "Swift student challenge 2024"),
+//        TicketModel(title: "Tec de Monterrey", headline: "Business Weeekend"),
+//        TicketModel(title: "Enterprise Event", headline: "Business meeting at the restaurant"),
+//        TicketModel(title: "Social Event", headline: "Party in the club")
+//    ]
+//    
+//    // static method
+//    static func createTicket(lista: inout[TicketModel], title: String, headline: String) {
+//        let newTicket = TicketModel(title: title, headline: headline)
+//        // append created ticket to previous list
+//        lista.append(newTicket)
+//    }
+}
+
+extension TicketModel {
+    public static var defaultTicket = TicketModel(title: "Title", headline: "Headline")
 }

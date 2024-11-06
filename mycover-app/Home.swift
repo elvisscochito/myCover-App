@@ -2,15 +2,16 @@ import SwiftUI
 
 struct Home: View {
     
-    @State private var tickets: [TicketModel] = TicketModel.sampleTickets
+    @ObservedObject var ticketsVM  = TicketViewModel()
+    // @State private var tickets: [TicketModel] = TicketModel.sampleTickets
     @State private var isShowingSheet = false
     @State private var searchTerm = ""
     
     var filterTicketsCardsView: [TicketModel] {
         if searchTerm.isEmpty {
-            return tickets
+            return ticketsVM.arrTickets
         } else {
-            return tickets.filter { $0.title.localizedCaseInsensitiveContains(searchTerm) || $0.headline.localizedCaseInsensitiveContains(searchTerm)
+            return ticketsVM.arrTickets.filter { $0.title.localizedCaseInsensitiveContains(searchTerm) || $0.headline.localizedCaseInsensitiveContains(searchTerm)
             }
         }
     }
@@ -35,7 +36,7 @@ struct Home: View {
             .searchable(text: $searchTerm, prompt: "Search for ticket name or code")
             .sheet(isPresented: $isShowingSheet, content: {
                 // Pass bindling of tickets and isShowigSheet
-                NewTicketSheetView(tickets: $tickets, isShowingSheet: $isShowingSheet)
+                NewTicketSheetView(ticketsVM: ticketsVM, isShowingSheet: $isShowingSheet)
             })
         }
     }

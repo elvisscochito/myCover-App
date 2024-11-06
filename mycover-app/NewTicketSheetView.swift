@@ -17,7 +17,7 @@ import SwiftUI
 
 struct NewTicketSheetView: View {
     
-    @Binding var tickets: [TicketModel]
+    @ObservedObject var ticketsVM: TicketViewModel
     @Binding var isShowingSheet: Bool
     
     @State private var title = ""
@@ -50,7 +50,7 @@ struct NewTicketSheetView: View {
                 // tickets.append(newTicket)
                 
                 // use static func to create and add the new ticket
-                TicketModel.createTicket(lista: &tickets, title: title, headline: headline)
+                ticketsVM.createTicket(title: title, headline: headline)
                 isShowingSheet = false
             }) {
                 Text("Create event")
@@ -62,8 +62,6 @@ struct NewTicketSheetView: View {
 }
 
 #Preview {
-    NewTicketSheetView(
-        tickets: .constant(TicketModel.sampleTickets),
-        isShowingSheet: .constant(true)
+    NewTicketSheetView(ticketsVM: TicketViewModel(), isShowingSheet: .constant(true)
     )
 }
