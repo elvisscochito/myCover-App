@@ -30,7 +30,7 @@ struct NewTicketSheetView: View {
         VStack {
             Spacer()
             Spacer()
-            Text("New Ticket")
+            Text("New Event")
                 .font(.title)
                 .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
             Form {
