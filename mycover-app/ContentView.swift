@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var ticketsVM: TicketViewModel
     @State private var navigateToHome = false
 
     var body: some View {

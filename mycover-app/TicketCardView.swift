@@ -17,14 +17,16 @@ import SwiftUI
 
 struct TicketCardView: View {
     let ticket: TicketModel
+    @EnvironmentObject var ticketsVM: TicketViewModel // Acceso a TicketViewModel
     
     var body: some View {
         VStack {
-            VStack () {
+            VStack {
                 Text(ticket.title)
-                    .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                    .font(.title)
                     .foregroundColor(.white)
-                    .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                    .fontWeight(.bold)
+                
                 Text(ticket.headline)
                     .font(.headline)
                     .foregroundColor(.gray)
@@ -32,17 +34,19 @@ struct TicketCardView: View {
             }
             .padding()
             
-            Image("Add_to_Apple_Wallet_badge")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 275)
-
+            // Botón para crear el token
+            Button(action: {
+                ticketsVM.createToken(for: ticket) // Crea el token y lo agrega a arrTokens
+            }) {
+                Text("Create Ticket")
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+            }
+            .padding(.top, 10)
         }
         .navigationTitle(ticket.title)
-        .preferredColorScheme(/*@START_MENU_TOKEN@*/.dark/*@END_MENU_TOKEN@*/)
+        .preferredColorScheme(.dark)
     }
-}
-
-#Preview {
-    TicketCardView(ticket: TicketModel.defaultTicket)
 }

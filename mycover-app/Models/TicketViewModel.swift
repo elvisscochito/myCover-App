@@ -10,6 +10,7 @@ import SwiftUI
 
 class TicketViewModel: ObservableObject {
     @Published var arrTickets = [TicketModel]()
+    @Published var arrTokens = [TokenModel]()
     
     init(){
         getTickets()
@@ -28,9 +29,21 @@ class TicketViewModel: ObservableObject {
         arrTickets.append(ticket)
     }
     
+    func createToken(for ticket: TicketModel) -> TokenModel {
+            let newToken = TokenModel(
+                ticketID: ticket.id,
+                title: ticket.title,
+                headline: ticket.headline,
+                acquisitionDate: Date()
+            )
+            arrTokens.append(newToken) // Guarda el nuevo token en el arreglo de tokens
+            return newToken
+    }
+    
     func createTicket(title: String, headline: String) {
         let newTicket = TicketModel(title: title, headline: headline)
         // append created ticket to previous list
         arrTickets.append(newTicket)
     }
+    
 }

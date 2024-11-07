@@ -8,10 +8,14 @@
 import SwiftUI
 
 @main
-struct mycover_appApp: App {
+struct MyCoverApp: App {
+    @StateObject private var ticketsVM = TicketViewModel()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(ticketsVM) // Pasa el TicketViewModel a toda la aplicación
         }
     }
 }
+

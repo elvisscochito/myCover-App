@@ -17,12 +17,12 @@ struct TabBarView: View {
             
             // Segunda pestaña: Settings
             NavigationView {
-                SettingsView()
-                    .navigationTitle("Settings")
+                WalletView()
+                    .navigationTitle("Wallet")
             }
             .tabItem {
-                Image(systemName: "gearshape.fill")
-                Text("Settings")
+                Image(systemName: "ticket.fill")
+                Text("My Tickets")
             }
             
             // Tercera pestaña: Profile
