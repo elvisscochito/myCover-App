@@ -4,6 +4,7 @@ node_modules
 # Editor directories and system files
 .vscode/*
 .DS_Store
+app/.DS_Store
 
 # Logs
 logs
