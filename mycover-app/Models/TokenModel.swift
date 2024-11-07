@@ -6,12 +6,15 @@
 //
 
 import Foundation
+import MapKit
 
 struct TokenModel: Identifiable {
-    let id = UUID() // Agregar conformidad a Identifiable
+    let id = UUID()
     let ticketID: UUID
     let title: String
     let headline: String
+    let direction: String
+    let coordinates: CLLocationCoordinate2D
     let acquisitionDate: Date
     
     // Genera el token en formato de cadena
@@ -21,8 +24,13 @@ struct TokenModel: Identifiable {
         formatter.timeStyle = .short
         let dateStr = formatter.string(from: acquisitionDate)
         
-        return "Ticket: \(title), Headline: \(headline), Date Acquired: \(dateStr)"
+        // Formato mejorado con todos los detalles y coordenadas desglosadas
+        return """
+        Title: \(title)
+        Headline: \(headline)
+        Direction: \(direction)
+        Coordinates: \(coordinates.latitude), \(coordinates.longitude)
+        Date Acquired: \(dateStr)
+        """
     }
 }
-
-

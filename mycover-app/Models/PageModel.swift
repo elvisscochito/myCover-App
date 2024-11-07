@@ -13,6 +13,7 @@ struct PageModel: Identifiable, Equatable {
     var headline: String
     var pageNumber: Int
     
+    
     static var defaultPage = PageModel(title: "Title", headline: "Aa", pageNumber: 0)
     
     static var samplePages: [PageModel] = [

@@ -33,6 +33,4 @@ struct TicketDetailsView: View {
     }
 }
 
-#Preview {
-    TicketDetailsView(ticket: TicketModel.defaultTicket )
-}
+

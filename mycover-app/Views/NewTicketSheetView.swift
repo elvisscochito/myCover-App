@@ -1,19 +1,5 @@
-//
-//  NewTicketSheetView.swift
-//  mycover-app
-//
-//  Created by Joel Vargas on 24/10/24.
-//
-
-
-//
-//  NewTicketSheetView.swift
-//  myTickets
-//
-//  Created by Elviro Dominguez Soriano on 25/02/24.
-//
-
 import SwiftUI
+import MapKit
 
 struct NewTicketSheetView: View {
     
@@ -22,46 +8,82 @@ struct NewTicketSheetView: View {
     
     @State private var title = ""
     @State private var headline = ""
-//    @State private var date = Date.now
-//    @State private var backgroundColor = Color.black
-//    @State private var textColor = Color.white
+    @State private var direction = ""
+    @State private var selectedCoordinate = CLLocationCoordinate2D(latitude: 25.650694, longitude: -100.291868) // Coordenadas iniciales
     
+    @State private var camera: MapCameraPosition = .region(
+        MKCoordinateRegion(
+            center: CLLocationCoordinate2D(latitude: 25.650694, longitude: -100.291868),
+            span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+        )
+    )
+
     var body: some View {
         VStack {
             Spacer()
-            Spacer()
             Text("New Event")
                 .font(.title)
-                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                .fontWeight(.bold)
+            
             Form {
                 TextField("Title", text: $title)
                 TextField("Headline", text: $headline)
-//                DatePicker("Datetime", selection: $date)
-//                ColorPicker("Background Color", selection: $backgroundColor)
-//                ColorPicker("Text Color", selection: $textColor)
+                TextField("Direction", text: $direction)
+
+                // Mapa para seleccionar coordenadas
+                Section(header: Text("Select Location")) {
+                    Map(position: $camera) {
+                        // Marcador en la ubicación seleccionada, que se moverá cada vez que el usuario toque en el mapa
+                        Marker("Selected Location", coordinate: selectedCoordinate)
+                            .tint(.red)
+                        
+                        // Marcadores para otros tickets
+                        ForEach(ticketsVM.arrTickets) { ticket in
+                            let ticketLocation = ticket.coordinates
+                            Marker(ticket.title, coordinate: ticketLocation)
+                                .tag(ticket.title)
+                                .tint(.blue) // Color diferente para diferenciar
+                        }
+                    }
+                    .mapStyle(.standard(elevation: .realistic))
+                    .frame(height: 200)
+                    .onTapGesture { location in
+                        // Convertir la ubicación del toque a coordenadas y actualizar el marcador seleccionado
+                        let mapPoint = MKMapPoint(x: location.x, y: location.y)
+                        let coordinate = mapPoint.coordinate
+                        selectedCoordinate = coordinate
+                    }
+
+                    // Muestra las coordenadas seleccionadas
+                    HStack {
+                        Text("Latitude: \(selectedCoordinate.latitude)")
+                        Spacer()
+                        Text("Longitude: \(selectedCoordinate.longitude)")
+                    }
+                }
             }
-//            Image("Add_to_Apple_Wallet_badge")
-//                .resizable()
-//                .aspectRatio(contentMode: .fit)
-//                .frame(width: 275)
+            
             Button(action: {
-                //let newTicket = TicketModel(title: title, headline: headline)
-                // append created ticket to previous list
-                // tickets.append(newTicket)
-                
-                // use static func to create and add the new ticket
-                ticketsVM.createTicket(title: title, headline: headline)
+                // Crear y agregar el nuevo ticket usando las coordenadas seleccionadas
+                ticketsVM.createTicket(
+                    title: title,
+                    headline: headline,
+                    direction: direction,
+                    coordinates: selectedCoordinate
+                )
                 isShowingSheet = false
             }) {
-                Text("Create event")
+                Text("Create Event")
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
             }
-
+            .padding()
         }
-        
     }
 }
 
 #Preview {
-    NewTicketSheetView(ticketsVM: TicketViewModel(), isShowingSheet: .constant(true)
-    )
+    NewTicketSheetView(ticketsVM: TicketViewModel(), isShowingSheet: .constant(true))
 }

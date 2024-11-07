@@ -20,11 +20,15 @@
 //@State private var textColor = Color.white
 
 import Foundation
+import MapKit
+
 
 struct TicketModel: Identifiable {
     let id = UUID()
     var title: String
     var headline: String
+    var direction: String
+    var coordinates: CLLocationCoordinate2D
     
 //    static var defaultTicket = TicketModel(title: "Title", headline: "Headline")
 //    
@@ -43,6 +47,4 @@ struct TicketModel: Identifiable {
 //    }
 }
 
-extension TicketModel {
-    public static var defaultTicket = TicketModel(title: "Title", headline: "Headline")
-}
+
