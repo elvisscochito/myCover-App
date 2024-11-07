@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var ticketsVM = TicketViewModel() // Inicializa aquí el ViewModel
+    // neds to improved for the first call
+    // @StateObject private var ticketsVM = TicketViewModel() // Inicializa aquí el ViewModel
     @State private var navigateToHome = false
 
     var body: some View {
@@ -9,7 +10,7 @@ struct ContentView: View {
             ZStack {
                 if navigateToHome {
                     OnBoardingView() // Vista a la que se navega después de 2 segundos
-                        .environmentObject(ticketsVM) // Pasa el ViewModel
+                        //.environmentObject(ticketsVM) // Pasa el ViewModel
                 } else {
                     ZStack {
                        Text("Icono Logo")
