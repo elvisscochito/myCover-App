@@ -33,7 +33,7 @@ struct Home: View {
                 .fontWeight(.bold)
                 .foregroundStyle(.white))
             .navigationTitle("Home")
-            .searchable(text: $searchTerm, prompt: "Search for ticket name or code")
+            .searchable(text: $searchTerm, prompt: "Search for ticket name, headline or code")
             .sheet(isPresented: $isShowingSheet, content: {
                 // Pass bindling of tickets and isShowigSheet
                 NewTicketSheetView(ticketsVM: ticketsVM, isShowingSheet: $isShowingSheet)

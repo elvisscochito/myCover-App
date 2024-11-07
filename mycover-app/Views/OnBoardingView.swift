@@ -10,7 +10,7 @@ struct OnBoardingView: View {
     var body: some View {
         ZStack {
             if isOnBoardingFinish {
-                TabBarView()
+                SignInView()
             } else {
                 VStack{
                     

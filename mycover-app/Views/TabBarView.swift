@@ -8,14 +8,22 @@ struct TabBarView: View {
             NavigationView {
                 Home()
                     .navigationTitle("Home")
-                    
             }
             .tabItem {
                 Image(systemName: "house.fill")
                 Text("Home")
             }
             
-            // Segunda pestaña: Settings
+            NavigationView{
+                MapView()
+                    .navigationTitle("Map")
+            }
+            .tabItem {
+                Image(systemName: "map.fill")
+                Text("Map")
+            }
+            
+            // Third tab: WalletView
             NavigationView {
                 WalletView()
                     .navigationTitle("Wallet")
