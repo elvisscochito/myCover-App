@@ -13,7 +13,14 @@ struct ContentView: View {
                         //.environmentObject(ticketsVM) // Pasa el ViewModel
                 } else {
                     ZStack {
-                       Text("Icono Logo")
+                        
+                        Color.black // Establece el fondo negro
+                                                    .ignoresSafeArea()
+                        Image("Icon") // Asegúrate de que "AppIconImage" sea el nombre correcto en los assets
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 100, height: 100)
+                
                     }
                     .onAppear {
                         // Navegar a OnBoardingView después de 2 segundos
