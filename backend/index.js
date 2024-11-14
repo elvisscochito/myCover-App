@@ -1,15 +1,14 @@
 import express from "express";
 /* import { PKPass } from "passkit-generator"
 import path from "path"
-import fs from "file-system" */
+import fs from "file-system"
 
 import admin from "firebase-admin";
 import serviceAccount from "path/to/serviceAccountKey.json";
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
-});
-
+}); */
 
 const app = express()
 
