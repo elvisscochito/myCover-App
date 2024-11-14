@@ -1,5 +1,6 @@
 import SwiftUI
 import MapKit
+import PassKit
 
 struct NewTicketSheetView: View {
     
