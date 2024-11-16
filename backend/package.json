@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@firebasegen/default-connector": "file:dataconnect-generated/js/default-connector",
     "axios": "^1.7.7",
     "express": "^4.21.1",
     "file-system": "^2.2.2",
