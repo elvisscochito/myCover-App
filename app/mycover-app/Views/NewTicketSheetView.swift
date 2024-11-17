@@ -1,23 +1,21 @@
 import SwiftUI
 import MapKit
-import PassKit
+import Combine
 
 struct NewTicketSheetView: View {
-    
     @ObservedObject var ticketsVM: TicketViewModel
     @Binding var isShowingSheet: Bool
     
     @State private var title = ""
     @State private var headline = ""
     @State private var direction = ""
-    @State private var selectedCoordinate = CLLocationCoordinate2D(latitude: 25.650694, longitude: -100.291868) // Coordenadas iniciales
-    
-    @State private var camera: MapCameraPosition = .region(
-        MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: 25.650694, longitude: -100.291868),
-            span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
-        )
+    @State private var selectedCoordinate = CLLocationCoordinate2D(latitude: 25.650694, longitude: -100.291868)
+    @State private var region = MKCoordinateRegion(
+        center: CLLocationCoordinate2D(latitude: 25.650694, longitude: -100.291868),
+        span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
     )
+    @State private var keyboardHeight: CGFloat = 0
+    private var keyboardPublisher = NotificationCenter.default.publisher(for: UIResponder.keyboardWillChangeFrameNotification)
 
     var body: some View {
         VStack {
@@ -30,32 +28,36 @@ struct NewTicketSheetView: View {
                 TextField("Title", text: $title)
                 TextField("Headline", text: $headline)
                 TextField("Direction", text: $direction)
-
-                // Mapa para seleccionar coordenadas
+                
                 Section(header: Text("Select Location")) {
-                    Map(position: $camera) {
-                        // Marcador en la ubicación seleccionada, que se moverá cada vez que el usuario toque en el mapa
-                        Marker("Selected Location", coordinate: selectedCoordinate)
-                            .tint(.red)
-                        
-                        // Marcadores para otros tickets
+                    Map(coordinateRegion: $region) {
+                        // Anotaciones para tickets existentes
                         ForEach(ticketsVM.arrTickets) { ticket in
-                            let ticketLocation = ticket.coordinates
-                            Marker(ticket.title, coordinate: ticketLocation)
-                                .tag(ticket.title)
-                                .tint(.blue) // Color diferente para diferenciar
+                            Annotation("Ticket", coordinate: ticket.coordinates) {
+                                Image(systemName: "mappin")
+                                    .foregroundColor(.blue)
+                                    .font(.title)
+                            }
+                        }
+                        
+                        // Anotación para la ubicación seleccionada
+                        Annotation("Selected Location", coordinate: selectedCoordinate) {
+                            Image(systemName: "mappin.circle.fill")
+                                .foregroundColor(.red)
+                                .font(.title)
                         }
                     }
-                    .mapStyle(.standard(elevation: .realistic))
                     .frame(height: 200)
-                    .onTapGesture { location in
-                        // Convertir la ubicación del toque a coordenadas y actualizar el marcador seleccionado
-                        let mapPoint = MKMapPoint(x: location.x, y: location.y)
-                        let coordinate = mapPoint.coordinate
-                        selectedCoordinate = coordinate
-                    }
+                    .gesture(DragGesture(minimumDistance: 0)
+                        .onEnded { value in
+                            let mapView = MKMapView(frame: .zero)
+                            mapView.region = region
+                            let touchPoint = CGPoint(x: value.location.x, y: value.location.y)
+                            let touchCoordinate = mapView.convert(touchPoint, toCoordinateFrom: mapView)
+                            selectedCoordinate = touchCoordinate
+                        }
+                    )
 
-                    // Muestra las coordenadas seleccionadas
                     HStack {
                         Text("Latitude: \(selectedCoordinate.latitude)")
                         Spacer()
@@ -63,9 +65,9 @@ struct NewTicketSheetView: View {
                     }
                 }
             }
+            .padding(.bottom, keyboardHeight)
             
             Button(action: {
-                // Crear y agregar el nuevo ticket usando las coordenadas seleccionadas
                 ticketsVM.createTicket(
                     title: title,
                     headline: headline,
@@ -82,9 +84,11 @@ struct NewTicketSheetView: View {
             }
             .padding()
         }
+        .onReceive(keyboardPublisher) { notification in
+            if let frame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+                keyboardHeight = frame.minY < UIScreen.main.bounds.height ? frame.height : 0
+            }
+        }
+        .animation(.easeOut, value: keyboardHeight)
     }
-}
-
-#Preview {
-    NewTicketSheetView(ticketsVM: TicketViewModel(), isShowingSheet: .constant(true))
 }

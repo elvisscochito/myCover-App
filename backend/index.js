@@ -1,14 +1,16 @@
-import express from "express";
-/* import { PKPass } from "passkit-generator"
-import path from "path"
-import fs from "file-system"
+const functions = require("firebase-functions")
+const PKPass = require("passkit-generator")
+const admin = require("firebase-admin")
+var fs = require("file-system")
+var path = require("path")
+var axios = require("axios")
 
-import admin from "firebase-admin";
-import serviceAccount from "path/to/serviceAccountKey.json";
-
+/* init */
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-}); */
+
+})
+
+const express = require("express")
 
 const app = express()
 
