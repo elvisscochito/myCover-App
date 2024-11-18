@@ -23,11 +23,14 @@ exports.pass = functions.https.onRequest(async (request, response) => {
           },
         },
         {
-          serialNumber: "AAGH44625236dddaffbda",
-          description: "Pase de Ejemplo",
-          organizationName: "Mi Organización",
-        }
-      );
+        description: request.body.description
+    })
+
+      /* primary fields */
+      if (request.body.primaryFields) {
+        const { label, value } = request.body.primaryFields;
+        pass.primaryFields = [{ key: "staffName", label, value }];
+      }
   
       // Generar el pase
       const buffer = pass.getAsBuffer();
