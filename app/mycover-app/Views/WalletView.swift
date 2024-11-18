@@ -4,21 +4,22 @@ struct WalletView: View {
     @EnvironmentObject var ticketViewModel: TicketViewModel // Acceso al ViewModel
     
     var body: some View {
-        VStack {
-            
-            List(ticketViewModel.arrTokens) { token in
-                VStack(alignment: .leading) {
-                    Text(token.title)
-                        .font(.headline)
-                    Text(token.headline)
-                        .font(.subheadline)
-                    Text("Acquired on: \(token.acquisitionDate, formatter: dateFormatter)")
-                        .font(.caption)
-                }
-                .padding(.vertical, 5)
-            }
-            .navigationTitle("My Tickets")
-        }
+        Text("Wallet")
+//        VStack {
+//            
+//            List(ticketViewModel.arrTokens) { token in
+//                VStack(alignment: .leading) {
+//                    Text(token.title)
+//                        .font(.headline)
+//                    Text(token.headline)
+//                        .font(.subheadline)
+//                    Text("Acquired on: \(token.acquisitionDate, formatter: dateFormatter)")
+//                        .font(.caption)
+//                }
+//                .padding(.vertical, 5)
+//            }
+//            .navigationTitle("My Tickets")
+//        }
     }
 }
 

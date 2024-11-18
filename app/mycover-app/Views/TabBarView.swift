@@ -14,14 +14,14 @@ struct TabBarView: View {
                 Text("Home")
             }
             
-            NavigationView{
+            /*NavigationView{
                 MapView()
                     .navigationTitle("Map")
             }
             .tabItem {
                 Image(systemName: "map.fill")
                 Text("Map")
-            }
+            }*/
             
             // Third tab: WalletView
             NavigationView {

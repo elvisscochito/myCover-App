@@ -7,7 +7,8 @@ struct MapView: View {
     @State private var camera: MapCameraPosition = .automatic
     
     var body: some View {
-        Map(position: $camera) {
+        Text("MapView")
+        /*Map(position: $camera) {
             // Agrega un marcador para cada ticket en arrTickets
             ForEach(ticketsVM.arrTickets) { ticket in
                 let ticketLocation = ticket.coordinates
@@ -17,6 +18,7 @@ struct MapView: View {
             }
         }
         .mapStyle(.standard(elevation: .realistic)) // Vista de manejo con elevación
+        */
     }
 }
 

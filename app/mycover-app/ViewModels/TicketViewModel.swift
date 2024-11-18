@@ -20,13 +20,13 @@ class TicketViewModel: ObservableObject {
     func getTickets() {
         var ticket: TicketModel
         
-        ticket = TicketModel(title: "Apple Event", headline: "Swift student challenge 2024", direction: "EXPEDITION", coordinates: CLLocationCoordinate2D(latitude: 25.652145, longitude: -100.292265))
+        ticket = TicketModel(title: "Apple Event", headline: "Swift student challenge 2024")
         arrTickets.append(ticket)
-        ticket = TicketModel(title: "TecWeek", headline: "Business Weekend", direction: "ITESM", coordinates: CLLocationCoordinate2D(latitude: 25.652145, longitude: -100.292265))
+        ticket = TicketModel(title: "TecWeek", headline: "Business Weekend")
         arrTickets.append(ticket)
-        ticket = TicketModel(title: "Enterprise Event", headline: "Business meeting at the restaurant", direction: "San Pedro", coordinates: CLLocationCoordinate2D(latitude: 25.662273, longitude: -100.394187))
+        ticket = TicketModel(title: "Enterprise Event", headline: "Business meeting at the restaurant")
         arrTickets.append(ticket)
-        ticket = TicketModel(title: "Social Event", headline: "Party in the club", direction: "Garcia", coordinates: CLLocationCoordinate2D(latitude: 25.734434, longitude: -100.280716))
+        ticket = TicketModel(title: "Social Event", headline: "Party in the club")
         arrTickets.append(ticket)
     }
     
@@ -34,17 +34,14 @@ class TicketViewModel: ObservableObject {
         let newToken = TokenModel(
             ticketID: ticket.id,
             title: ticket.title,
-            headline: ticket.headline,
-            direction: ticket.direction,
-            coordinates: CLLocationCoordinate2D(latitude: ticket.coordinates.latitude, longitude: ticket.coordinates.longitude),
-            acquisitionDate: Date()
+            headline: ticket.headline
         )
         arrTokens.append(newToken)
         return newToken
     }
     
-    func createTicket(title: String, headline: String, direction: String, coordinates: CLLocationCoordinate2D) {
-        let newTicket = TicketModel(title: title, headline: headline, direction: direction, coordinates: coordinates)
+    func createTicket(title: String, headline: String) {
+        let newTicket = TicketModel(title: title, headline: headline)
         arrTickets.append(newTicket)
     }
 }

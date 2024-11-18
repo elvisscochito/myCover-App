@@ -13,24 +13,26 @@ struct TokenModel: Identifiable {
     let ticketID: UUID
     let title: String
     let headline: String
-    let direction: String
-    let coordinates: CLLocationCoordinate2D
-    let acquisitionDate: Date
+//    let direction: String
+//    let coordinates: CLLocationCoordinate2D
+//    let acquisitionDate: Date
     
     // Genera el token en formato de cadena
     func generateTokenString() -> String {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
-        let dateStr = formatter.string(from: acquisitionDate)
+        // let dateStr = formatter.string(from: acquisitionDate)
         
         // Formato mejorado con todos los detalles y coordenadas desglosadas
         return """
         Title: \(title)
         Headline: \(headline)
-        Direction: \(direction)
-        Coordinates: \(coordinates.latitude), \(coordinates.longitude)
-        Date Acquired: \(dateStr)
         """
     }
 }
+
+
+/*Direction: \(direction)
+Coordinates: \(coordinates.latitude), \(coordinates.longitude)
+Date Acquired: \(dateStr)*/

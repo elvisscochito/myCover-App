@@ -27,8 +27,8 @@ struct TicketModel: Identifiable {
     let id = UUID()
     var title: String
     var headline: String
-    var direction: String
-    var coordinates: CLLocationCoordinate2D
+    //var direction: String
+    //var coordinates: CLLocationCoordinate2D
     
 //    static var defaultTicket = TicketModel(title: "Title", headline: "Headline")
 //    
