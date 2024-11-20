@@ -3,9 +3,15 @@ const { PKPass } = require("passkit-generator"); // Importa PKPass directamente 
 const fs = require("fs");
 const path = require("path");
 const axios = require("axios");
+const crypto = require("crypto");
 
 exports.pass = functions.https.onRequest(async (request, response) => {
     try {
+
+      if (!request.body || !request.body.description || !request.body.generic || !request.body.generic.primaryFields) {
+        return response.status(400).send({ error: "El cuerpo de la solicitud debe incluir 'description' y 'generic.primaryFields'." });
+      }
+
       // Cargar certificados
       const wwdr = fs.readFileSync(path.join(__dirname, "certs", "wwdr.pem"), "utf8");
       const signerCert = fs.readFileSync(path.join(__dirname, "certs", "signerCert.pem"), "utf8");
@@ -33,6 +39,27 @@ exports.pass = functions.https.onRequest(async (request, response) => {
               pass.primaryFields.push(field);
           });
       }
+
+      // Generar un `passID` único usando los datos de la solicitud
+      const allStrings = JSON.stringify(request.body); // Combinar todos los datos como un solo string
+      const passID = crypto
+          .createHash("md5")
+          .update(`${allStrings}_${Date.now()}`) // Combinar con la marca de tiempo para asegurar unicidad
+          .digest("hex");
+        
+      console.log("passID", passID);
+
+
+
+      // Configurar los códigos de barras usando .setBarcodes()
+      pass.setBarcodes({
+        message: passID,
+        format: "PKBarcodeFormatQR",
+        altText: "Scan this QR code",
+      });
+
+
+
       
   
 

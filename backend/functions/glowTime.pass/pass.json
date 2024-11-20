@@ -16,5 +16,13 @@
 		}
 	  ]
 	},
+	"barcodes": [
+		{
+			"message": "123456789",
+			"format": "PKBarcodeFormatQR",
+			"messageEncoding": "iso-8859-1"
+		}
+	],
+
 	"eventTicket": {}
   }
