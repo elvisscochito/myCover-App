@@ -11,7 +11,6 @@ exports.pass = functions.https.onRequest(async (request, response) => {
       const signerCert = fs.readFileSync(path.join(__dirname, "certs", "signerCert.pem"), "utf8");
       const signerKey = fs.readFileSync(path.join(__dirname, "certs", "signerKey.pem"), "utf8");
   
-      // Crear un pase desde un modelo
       const pass = await PKPass.from(
         {
           model: path.join(__dirname, "glowTime.pass"),
@@ -23,14 +22,43 @@ exports.pass = functions.https.onRequest(async (request, response) => {
           },
         },
         {
-        description: request.body.description
-    })
+          description: request.body.description,
+          // Pasar directamente los primaryFields desde eventTicket
+        }
+      );
+
+      const primaryFields = request.body.generic.primaryFields;
+      if (Array.isArray(primaryFields)) {
+          primaryFields.forEach((field) => {
+              pass.primaryFields.push(field);
+          });
+      }
+      
+  
+
+
+
+      // pass.primaryFields.push({
+      //   key: "staffName",
+      //   label: "bb",
+      //   value: "bb",
+      // });
+        
+      
+      /* primary fields */
+      // if (request.body.primaryFields) {
+      //   const {key,label, value } = request.body.primaryFields;
+      //   pass.primaryFields.push( { key , label, value });
+      // }
+      
+      
+
 
       /* primary fields */
-      if (request.body.primaryFields) {
-        const { label, value } = request.body.primaryFields;
-        pass.primaryFields = [{ key: "staffName", label, value }];
-      }
+      /*if (request.body.primaryFields) {
+        const {key,label, value } = request.body.primaryFields;
+        pass.primaryFields = [{ key , label, value }];
+      }*/
   
       // Generar el pase
       const buffer = pass.getAsBuffer();

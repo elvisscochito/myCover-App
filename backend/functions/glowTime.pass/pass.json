@@ -11,9 +11,10 @@
 	  "primaryFields" : [
 		{
 		  "key" : "staffName",
-		  "label" : "Name",
-		  "value" : "Elviro Joel"
+		  "label" : "Aa",
+		  "value" : "Aa"
 		}
 	  ]
-	}
+	},
+	"eventTicket": {}
   }
