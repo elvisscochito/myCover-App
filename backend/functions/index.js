@@ -8,7 +8,7 @@ const crypto = require("crypto");
 exports.pass = functions.https.onRequest(async (request, response) => {
     try {
 
-      if (!request.body || !request.body.description || !request.body.generic || !request.body.generic.primaryFields) {
+      if (!request.body || !request.body.description || !request.body.primaryFields) {
         return response.status(400).send({ error: "El cuerpo de la solicitud debe incluir 'description' y 'generic.primaryFields'." });
       }
 
@@ -33,7 +33,7 @@ exports.pass = functions.https.onRequest(async (request, response) => {
         }
       );
 
-      const primaryFields = request.body.generic.primaryFields;
+      const primaryFields = request.body.primaryFields;
       if (Array.isArray(primaryFields)) {
           primaryFields.forEach((field) => {
               pass.primaryFields.push(field);

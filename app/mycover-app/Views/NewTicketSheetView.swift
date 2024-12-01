@@ -68,9 +68,11 @@ struct NewTicketSheetView: View {
             //.padding(.bottom, keyboardHeight)
             
             Button(action: {
-                ticketsVM.createTicket(
-                    title: title,
-                    headline: headline/*,
+                ticketsVM.postTickets(
+                    description: title,
+                    staffName: headline
+                    /*title: title,
+                    headline: headline*//*,
                     direction: direction,
                     coordinates: selectedCoordinate*/
                 )
@@ -83,6 +85,11 @@ struct NewTicketSheetView: View {
                     .cornerRadius(10)
             }
             .padding()
+            
+            if let isSuccessful = ticketsVM.isRequestSuccessful {
+                Text(isSuccessful ? "Request was successful! 🎉" : "Request failed 😞")
+                    .foregroundColor(isSuccessful ? .green : .red)
+            }
         }
         .onReceive(keyboardPublisher) { notification in
             if let frame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
