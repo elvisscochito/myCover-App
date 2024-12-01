@@ -40,12 +40,7 @@ class TicketViewModel: ObservableObject {
         return newToken
     }
     
-    func createTicket(title: String, headline: String) {
-        let newTicket = TicketModel(title: title, headline: headline)
-        arrTickets.append(newTicket)
-    }
-    
-    func postTickets(description: String, staffName: String) {
+    func postTicket(description: String, staffName: String) {
         guard let url = URL(string: "http://127.0.0.1:5001/mycover-6f7ff/us-central1/pass") else {
             print("Error: invalid URL")
             self.isRequestSuccessful = false
@@ -87,6 +82,22 @@ class TicketViewModel: ObservableObject {
                 print("Response status code: \(response.statusCode)")
                 DispatchQueue.main.async {
                     self?.isRequestSuccessful = (200...299).contains(response.statusCode)
+                    
+                    if self?.isRequestSuccessful == true {
+                        let newTicket = TicketModel(title: description, headline: staffName)
+                        self?.arrTickets.append(newTicket)
+                           
+                        let alert = UIAlertController(title: "Ticket creado", message: "El ticket se ha creado correctamente", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                           
+                        // present UIAlertController using active screen
+                        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                           let rootViewController = windowScene.windows.first?.rootViewController {
+                            rootViewController.present(alert, animated: true, completion: nil)
+                        } else {
+                            print("No se pudo obtener la ventana activa para presentar la alerta.")
+                        }
+                    }
                 }
             }
             

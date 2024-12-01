@@ -7,7 +7,7 @@ struct Test: View {
         VStack {
             Text("Hello, World!")
             Button("Go to Home") {
-                ticketViewModel.postTickets(
+                ticketViewModel.postTicket(
                     description: "Cumple de Benji",
                     staffName: "Testing from xcode"
                 )

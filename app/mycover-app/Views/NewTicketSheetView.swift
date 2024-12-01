@@ -68,7 +68,7 @@ struct NewTicketSheetView: View {
             //.padding(.bottom, keyboardHeight)
             
             Button(action: {
-                ticketsVM.postTickets(
+                ticketsVM.postTicket(
                     description: title,
                     staffName: headline
                     /*title: title,
@@ -98,4 +98,11 @@ struct NewTicketSheetView: View {
         }
         .animation(.easeOut, value: keyboardHeight)
     }
+}
+
+#Preview {
+    NewTicketSheetView(
+        ticketsVM: TicketViewModel(),
+        isShowingSheet: .constant(false)
+    )
 }
