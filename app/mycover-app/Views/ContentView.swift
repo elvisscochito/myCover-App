@@ -1,29 +1,32 @@
 import SwiftUI
 
 struct ContentView: View {
-    // neds to improved for the first call
-    // @StateObject private var ticketsVM = TicketViewModel() // Inicializa aquí el ViewModel
+    // init ViewModel
+    @StateObject private var ticketsVM = TicketViewModel()
     @State private var navigateToHome = false
 
     var body: some View {
         NavigationStack {
             ZStack {
                 if navigateToHome {
+                    // view thats got to after 2 seconds
                     OnBoardingView() // Vista a la que se navega después de 2 segundos
-                        //.environmentObject(ticketsVM) // Pasa el ViewModel
+                        // pass the ViewModel
+                        .environmentObject(ticketsVM)
                 } else {
                     ZStack {
-                        
-                        Color.black // Establece el fondo negro
+                        // set the background to black
+                        Color.black
                                                     .ignoresSafeArea()
-                        Image("Icon") // Asegúrate de que "AppIconImage" sea el nombre correcto en los assets
+                        // make sure that the "AppIconImage" is the right name of the asset
+                        Image("Icon")
                                                     .resizable()
                                                     .scaledToFit()
                                                     .frame(width: 100, height: 100)
                 
                     }
                     .onAppear {
-                        // Navegar a OnBoardingView después de 2 segundos
+                        // navigate to OnBoardingView after 2 seconds
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                             navigateToHome = true
                         }

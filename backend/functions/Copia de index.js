@@ -7,7 +7,7 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
-/* const {onRequest} = require("firebase-functions/v2/https"); */
+/* const {onRequest} = require("firebase-functions/v2/https");
 const functions = require("firebase-functions")
 const logger = require("firebase-functions/logger");
 const PKPass = require("passkit-generator")
@@ -19,17 +19,17 @@ var axios = require("axios")
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started
 
-/* exports.helloWorld = onRequest((request, response) => {
+exports.helloWorld = onRequest((request, response) => {
     logger.info("Hello logs!", {structuredData: true});
     response.send("Hello from Firebase!");
-}); */
+});
 
-/* init */
-/* admin.initializeApp({
+init
+admin.initializeApp({
     credential: admin.credential.applicationDefault()
-}) */
+})
 
-exports.pass = functions.https.onRequest((request, response) => { 
+exports.pass = functions.https.onRequest((request, response) => {
     PKPass.from({
         model: "glowTime.pass",
         certificates: {
@@ -40,14 +40,14 @@ exports.pass = functions.https.onRequest((request, response) => {
                 passphrase: "root"
             }
         }
-    }/* ,
+    },
 
     {
         authenticationToken: "pass.me",
         webServiceURL: "https://glowtime-passbook.herokuapp.com/",
         serialNumber: "123456",
         description: "Glow Time",
-    } */)
+    } )
 
     .then(async (newPass) => {
         const resp = await axios.get(request.body.thumbnail, {responseType: "arraybuffer"})
@@ -57,7 +57,7 @@ exports.pass = functions.https.onRequest((request, response) => {
     })
 })
 
-/* const express = require("express")
+const express = require("express")
 
 const app = express()
 
@@ -70,4 +70,5 @@ app.get("/", (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
-}) */
+})
+*/
