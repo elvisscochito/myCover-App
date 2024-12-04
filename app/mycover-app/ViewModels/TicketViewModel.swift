@@ -41,7 +41,7 @@ class TicketViewModel: ObservableObject {
     }
     
     func postTicket(description: String, staffName: String) {
-        guard let url = URL(string: "http://127.0.0.1:5001/mycover-6f7ff/us-central1/pass") else {
+        guard let url = URL(string: "https://app-o3i3ueqa6a-uc.a.run.app/api/postTicket") else {
             print("Error: invalid URL")
             self.isRequestSuccessful = false
             return
