@@ -7,8 +7,8 @@ const storageRef = admin.storage().bucket();
 
 const postTicket = async (request, response) => {
   try {
-    if (!request.body || !request.body.description || !request.body.primaryFields) {
-      return response.status(400).send({error: "El cuerpo de la solicitud debe incluir 'description' y 'generic.primaryFields'."});
+    if (!request.body || !request.body.description || !request.body.eventTicket.primaryFields) {
+      return response.status(400).send({error: "El cuerpo de la solicitud debe incluir 'description' y 'eventTicket.primaryFields'."});
     }
 
     // Cargar certificados
@@ -26,16 +26,45 @@ const postTicket = async (request, response) => {
           },
         },
         {
-          organizationName: request.body.organizationName,
           description: request.body.description,
+          organizationName: request.body.organizationName,
           // Pasar directamente los primaryFields desde eventTicket
         },
     );
-    const primaryFields = request.body.primaryFields;
-    if (Array.isArray(primaryFields)) {
-      primaryFields.forEach((field) => {
-        pass.primaryFields.push(field);
-      });
+    if (pass.type === "eventTicket") {
+      if (Array.isArray(request.body.eventTicket.primaryFields)) {
+      // Limpiamos los campos existentes
+        pass.primaryFields = [];
+
+        // Agregamos los nuevos valores proporcionados en la solicitud
+        request.body.eventTicket.primaryFields.forEach((field) => {
+          if (field.label && field.value) {
+            console.log("firstField.key:", field.key);
+            console.log("firstField.label:", field.label);
+            console.log("firstField.value:", field.value);
+            pass.primaryFields.push({
+              key: field.key,
+              label: field.label,
+              value: field.value,
+            });
+          }
+        });
+      }
+      if (Array.isArray(request.body.eventTicket.secondaryFields)) {
+        pass.secondaryFields = [];
+        request.body.eventTicket.secondaryFields.forEach((field) => {
+          if (field.label && field.value) {
+            console.log("firstField.key:", field.key);
+            console.log("firstField.label:", field.label);
+            console.log("firstField.value:", field.value);
+            pass.secondaryFields.push({
+              key: field.key,
+              label: field.label,
+              value: field.value,
+            });
+          }
+        });
+      }
     }
 
     // Generar un `passID` único usando los datos de la solicitud
@@ -50,7 +79,6 @@ const postTicket = async (request, response) => {
     pass.setBarcodes({
       message: passID,
       format: "PKBarcodeFormatQR",
-      altText: "Scan this QR code",
     });
 
     // pass.primaryFields.push({
