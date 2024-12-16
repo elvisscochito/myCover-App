@@ -15,15 +15,15 @@
 
 import SwiftUI
 
-struct TicketDetailsView: View {
-    var ticket: TicketModel
+struct EventDetailsView: View {
+    var evento: EventModel
     var body: some View {
         VStack {
-            Text(ticket.title)
+            Text(evento.title)
                 .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                 .foregroundColor(.white)
                 .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-            Text(ticket.headline)
+            Text(evento.headline)
                 .font(.headline)
                 .foregroundColor(.gray)
                 .fontWeight(.semibold)
@@ -31,6 +31,10 @@ struct TicketDetailsView: View {
         .padding()
         .preferredColorScheme(/*@START_MENU_TOKEN@*/.dark/*@END_MENU_TOKEN@*/)
     }
+}
+
+#Preview {
+    EventDetailsView(evento: EventModel(title: "Evento", headline: "Descripcion"))
 }
 
 

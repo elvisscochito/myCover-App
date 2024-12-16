@@ -4,15 +4,20 @@ struct ContentView: View {
     // init ViewModel
     @StateObject private var ticketsVM = TicketViewModel()
     @State private var navigateToHome = false
+    
 
+    
     var body: some View {
         NavigationStack {
             ZStack {
                 if navigateToHome {
-                    // view thats got to after 2 seconds
-                    OnBoardingView() // Vista a la que se navega después de 2 segundos
-                        // pass the ViewModel
-                        .environmentObject(ticketsVM)
+                    
+                    if ticketsVM.isLoggedIn{
+                        TabBarView()
+                    }else {
+                        OnBoardingView()
+                    }
+                    
                 } else {
                     ZStack {
                         // set the background to black
@@ -33,9 +38,13 @@ struct ContentView: View {
                     }
                 }
             }
+        }.onAppear {
+            UserDefaults.standard.set("Joel", forKey: "UserName")
         }
     }
+        
 }
+
 
 #Preview {
     ContentView()

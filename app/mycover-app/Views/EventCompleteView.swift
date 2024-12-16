@@ -15,19 +15,19 @@
 
 import SwiftUI
 
-struct TicketCardView: View {
-    let ticket: TicketModel
+struct EventCompleteView: View {
+    let evento: EventModel
     @EnvironmentObject var ticketsVM: TicketViewModel // Acceso a TicketViewModel
     
     var body: some View {
         VStack {
             VStack {
-                Text(ticket.title)
+                Text(evento.title)
                     .font(.title)
                     .foregroundColor(.white)
                     .fontWeight(.bold)
                 
-                Text(ticket.headline)
+                Text(evento.headline)
                     .font(.headline)
                     .foregroundColor(.gray)
                     .fontWeight(.semibold)
@@ -36,9 +36,13 @@ struct TicketCardView: View {
             
             // Botón para crear el token
             Button(action: {
-                ticketsVM.createToken(for: ticket) // Crea el token y lo agrega a arrTokens
+                
+                
+                
+                 // Crea el token y lo agrega a arrTokens
+                print("buy ticket")
             }) {
-                Text("Create Ticket")
+                Text("Buy Ticket")
                     .padding()
                     .background(Color.blue)
                     .foregroundColor(.white)
@@ -46,7 +50,11 @@ struct TicketCardView: View {
             }
             .padding(.top, 10)
         }
-        .navigationTitle(ticket.title)
+        .navigationTitle(evento.title)
         .preferredColorScheme(.dark)
     }
+}
+
+#Preview {
+    EventCompleteView(evento: EventModel(title: "Evento", headline: "Descripcion"))
 }

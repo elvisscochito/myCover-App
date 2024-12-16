@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct OnBoardingView: View {
-    
+    @StateObject private var viewModel = TicketViewModel()
     @State private var isOnBoardingFinish = false
     @State private var currentPageIndex = 0
     
@@ -10,7 +10,7 @@ struct OnBoardingView: View {
     var body: some View {
         ZStack {
             if isOnBoardingFinish {
-                SignInView()
+                SignInView(viewModel: viewModel)
             } else {
                 VStack{
                     

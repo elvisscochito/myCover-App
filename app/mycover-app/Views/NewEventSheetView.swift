@@ -2,12 +2,13 @@ import SwiftUI
 import MapKit
 import Combine
 
-struct NewTicketSheetView: View {
+struct NewEventSheetView: View {
     @ObservedObject var ticketsVM: TicketViewModel
     @Binding var isShowingSheet: Bool
     
-    @State private var title = ""
-    @State private var headline = ""
+    
+    @State private var usertitle = ""
+    @State private var userheadline = ""
     @State private var direction = ""
 //    @State private var selectedCoordinate = CLLocationCoordinate2D(latitude: 25.650694, longitude: -100.291868)
 //    @State private var region = MKCoordinateRegion(
@@ -25,9 +26,9 @@ struct NewTicketSheetView: View {
                 .fontWeight(.bold)
             
             Form {
-                TextField("Title", text: $title)
-                TextField("Headline", text: $headline)
-                TextField("Direction", text: $direction)
+                TextField("Title", text: $usertitle)
+                TextField("Headline", text: $userheadline)
+                //TextField("Direction", text: $direction)
                 
 //                Section(header: Text("Select Location")) {
 //                    Map(coordinateRegion: $region) {_ in 
@@ -68,14 +69,15 @@ struct NewTicketSheetView: View {
             //.padding(.bottom, keyboardHeight)
             
             Button(action: {
-                ticketsVM.postTicket(
-                    description: title,
-                    staffName: headline
-                    /*title: title,
-                    headline: headline*//*,
-                    direction: direction,
-                    coordinates: selectedCoordinate*/
-                )
+                ticketsVM.createEvent(title: usertitle, description: usertitle)
+//                ticketsVM.postTicket(
+//                    description: title,
+//                    staffName: headline
+//                    /*title: title,
+//                    headline: headline*//*,
+//                    direction: direction,s
+//                    coordinates: selectedCoordinate*/
+//                )
                 isShowingSheet = false
             }) {
                 Text("Create Event")
@@ -101,7 +103,7 @@ struct NewTicketSheetView: View {
 }
 
 #Preview {
-    NewTicketSheetView(
+    NewEventSheetView(
         ticketsVM: TicketViewModel(),
         isShowingSheet: .constant(false)
     )

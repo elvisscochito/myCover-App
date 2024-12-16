@@ -7,11 +7,11 @@ struct Home: View {
     @State private var isShowingSheet = false
     @State private var searchTerm = ""
     
-    var filterTicketsCardsView: [TicketModel] {
+    var filterTicketsCardsView: [EventModel] {
         if searchTerm.isEmpty {
-            return ticketsVM.arrTickets
+            return ticketsVM.arrEvents
         } else {
-            return ticketsVM.arrTickets.filter { $0.title.localizedCaseInsensitiveContains(searchTerm) || $0.headline.localizedCaseInsensitiveContains(searchTerm)
+            return ticketsVM.arrEvents.filter { $0.title.localizedCaseInsensitiveContains(searchTerm) || $0.headline.localizedCaseInsensitiveContains(searchTerm)
             }
         }
     }
@@ -19,9 +19,9 @@ struct Home: View {
     var body: some View {
         VStack {
             ScrollView {
-                ForEach(filterTicketsCardsView) { ticket in
-                    NavigationLink(destination: TicketCardView(ticket: ticket)) {
-                        TicketDetailsView(ticket: ticket)
+                ForEach(filterTicketsCardsView) { evento in
+                    NavigationLink(destination: EventCompleteView(evento: evento)) { //destination es haciad donde va
+                        EventDetailsView(evento: evento) //details es solo al preview del evento visible desde home
                     }
                 }
             }
@@ -36,7 +36,7 @@ struct Home: View {
             .searchable(text: $searchTerm, prompt: "Search for ticket title, headline or code")
             .sheet(isPresented: $isShowingSheet, content: {
                 // Pass bindling of tickets and isShowigSheet
-                NewTicketSheetView(ticketsVM: ticketsVM, isShowingSheet: $isShowingSheet)
+                NewEventSheetView(ticketsVM: ticketsVM, isShowingSheet: $isShowingSheet)
             })
         }
     }
