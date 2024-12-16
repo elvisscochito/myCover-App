@@ -17,7 +17,10 @@ import SwiftUI
 
 struct EventCompleteView: View {
     let evento: EventModel
-    @EnvironmentObject var ticketsVM: TicketViewModel // Acceso a TicketViewModel
+    @ObservedObject var ticketsVM: TicketViewModel
+    @State private var showAlert: Bool = false
+    @State private var alertMessage: String = ""
+    
     
     var body: some View {
         VStack {
@@ -36,7 +39,7 @@ struct EventCompleteView: View {
             
             // Botón para crear el token
             Button(action: {
-                
+                ticketsVM.postTicketreturnable(description: "routes", value: "staffName")
                 
                 
                  // Crea el token y lo agrega a arrTokens
@@ -49,12 +52,14 @@ struct EventCompleteView: View {
                     .cornerRadius(10)
             }
             .padding(.top, 10)
+            .alert(isPresented: $showAlert) {
+                        Alert(title: Text("Información"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                    }
         }
         .navigationTitle(evento.title)
         .preferredColorScheme(.dark)
+        
     }
 }
 
-#Preview {
-    EventCompleteView(evento: EventModel(title: "Evento", headline: "Descripcion"))
-}
+

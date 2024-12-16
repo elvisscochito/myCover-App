@@ -20,7 +20,7 @@ struct Home: View {
         VStack {
             ScrollView {
                 ForEach(filterTicketsCardsView) { evento in
-                    NavigationLink(destination: EventCompleteView(evento: evento)) { //destination es haciad donde va
+                    NavigationLink(destination: EventCompleteView(evento: evento, ticketsVM: ticketsVM)) { //destination es haciad donde va
                         EventDetailsView(evento: evento) //details es solo al preview del evento visible desde home
                     }
                 }

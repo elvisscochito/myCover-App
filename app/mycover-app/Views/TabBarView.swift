@@ -35,7 +35,7 @@ struct TabBarView: View {
             
             // Tercera pestaña: Profile
             NavigationView {
-                ProfileView()
+                Test()
                     .navigationTitle("Profile")
             }
             .tabItem {
