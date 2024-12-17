@@ -12,10 +12,28 @@ import PassKit
 
 
 class TicketViewModel: ObservableObject {
+    
+    @Published var username: String {
+            didSet {
+                UserDefaults.standard.set(username, forKey: "username")
+            }
+        }
+    
+    
     @Published var arrEvents = [EventModel]()
     @Published var arrTickets = [TicketModel]()
     @Published var isRequestSuccessful: Bool? = nil
     @Published var isLoggedIn: Bool = false // Estado de login
+    @State private var responseMessage: String = ""
+    @Published var passURL: URL?
+    
+    var isPassURLNil: Bool {
+            passURL == nil
+        }
+    
+    
+
+    
     
     
     private let loginKey = "userLoggedIn"
@@ -26,6 +44,11 @@ class TicketViewModel: ObservableObject {
     
     
     init(){
+        
+        
+        
+        
+        self.username = UserDefaults.standard.string(forKey: "username") ?? "Invitado"
         checkLoginStatus()
             if isLoggedIn {
                 getEvents()
@@ -78,11 +101,17 @@ class TicketViewModel: ObservableObject {
         arrEvents = eventsData.map { EventModel(title: $0.0, headline: $0.1) }
     }
     
+    
+    func getArrTickets() -> [TicketModel] {
+        return self.arrTickets
+        }
+    
     func createTicket(for evento: EventModel) {
         let newTickets = TicketModel(
             eventID: evento.id,
             title: evento.title,
-            headline: evento.headline
+            headline: evento.headline,
+            name: username
         )
         arrTickets.append(newTickets)
     }
@@ -93,29 +122,29 @@ class TicketViewModel: ObservableObject {
         arrEvents.append(newEvent)
     }
     
-    func postTicketreturnable(description: String, value: String) {
+   
+
+    
+    func postData(description: String, label: String) {
         guard let url = URL(string: "https://app-o3i3ueqa6a-uc.a.run.app/api/postTicket") else {
-            print("Error: invalid URL")
-            self.isRequestSuccessful = false
+            print("URL inválida")
             return
         }
         
         let parameters: [String: Any] = [
-            "description": description,
+            "organizationName": "neza",
+            "description": description ,
             "primaryFields": [
                 [
                     "key": "staffName",
-                    "label": "Usuario",
-                    "value": value
+                    "label": label ,
+                    "value": username
                 ]
             ]
         ]
         
-        print("Parameters: \(parameters)")
-        
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: parameters, options: []) else {
-            print("Error: invalid JSON data")
-            self.isRequestSuccessful = false
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: parameters) else {
+            print("Error al convertir parámetros a JSON")
             return
         }
         
@@ -124,127 +153,61 @@ class TicketViewModel: ObservableObject {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = jsonData
         
-        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+        URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
-                print("Error: \(error.localizedDescription)")
                 DispatchQueue.main.async {
-                    self?.isRequestSuccessful = false
+                    self.responseMessage = "Error: \(error.localizedDescription)"
                 }
                 return
             }
             
-            if let response = response as? HTTPURLResponse {
-                print("Response status code: \(response.statusCode)")
+            if let httpResponse = response as? HTTPURLResponse {
+                print("Código de estado HTTP: \(httpResponse.statusCode)")
             }
             
             if let data = data {
-                let fileURL = FileManager.default.temporaryDirectory.appendingPathComponent("ticket.pkpass")
+                let fileURL = FileManager.default.temporaryDirectory.appendingPathComponent("archivo.pkpass")
                 do {
                     try data.write(to: fileURL)
-                    print("Archivo .pkpass guardado en: \(fileURL)")
+                    print("Archivo guardado en: \(fileURL.path)")
+                    DispatchQueue.main.async {
+                        self.responseMessage = "Archivo listo para Wallet"
+                        self.passURL = fileURL
+                    }
                 } catch {
                     print("Error al guardar el archivo: \(error.localizedDescription)")
+                    DispatchQueue.main.async {
+                        self.responseMessage = "Error al guardar el archivo"
+                    }
                 }
-                
-                self?.savePKPass(data)
             }
         }.resume()
     }
 
-    
-    
-    
-    private func savePKPass(_ data: Data) {
+    func addPassToWallet() {
+        guard let url = passURL, let passData = try? Data(contentsOf: url) else {
+            self.responseMessage = "No se pudo cargar el archivo"
+            return
+        }
+        
         do {
-            // Crea un objeto PKPass
-            let pass = try PKPass(data: data)
+            let pass = try PKPass(data: passData)
             
-            // Presenta el PKAddPassesViewController para agregar el pase a Wallet
-            DispatchQueue.main.async {
-                if let addPassesViewController = PKAddPassesViewController(pass: pass) {
-                    // Asegúrate de que hay una ventana activa para presentar el controlador
-                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                       let rootViewController = windowScene.windows.first?.rootViewController {
-                        rootViewController.present(addPassesViewController, animated: true)
-                    } else {
-                        print("No se pudo obtener la ventana activa para presentar el controlador.")
-                    }
-                } else {
-                    print("No se pudo crear el controlador para agregar el pase.")
+            // Aquí desempaquetamos el controlador opcional de forma segura
+            if let addPassVC = PKAddPassesViewController(pass: pass) {
+                // Presentar el controlador
+                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                   let rootViewController = windowScene.windows.first?.rootViewController {
+                    rootViewController.present(addPassVC, animated: true)
                 }
+            } else {
+                print("No se pudo crear el controlador de Wallet.")
+                self.responseMessage = "No se pudo abrir Wallet"
             }
         } catch {
-            // Maneja errores genéricos
-            print("Error al procesar el archivo .pkpass: \(error.localizedDescription)")
+            print("Error al cargar el pase: \(error.localizedDescription)")
+            self.responseMessage = "Error al agregar a Wallet"
         }
-    }
-
-
-
-    
-    
-    
-    
-    func postTicket(description: String, staffName: String) {
-        guard !description.isEmpty, !staffName.isEmpty else {
-            print("Error: Description y Staff Name no deben estar vacíos.")
-            isRequestSuccessful = false
-            return
-        }
-        
-        guard let url = URL(string: "https://app-o3i3ueqa6a-uc.a.run.app/api/postTicket") else {
-            print("Error: invalid URL")
-            isRequestSuccessful = false
-            return
-        }
-        
-        let parameters: [String: Any] = [
-            "description": description,
-            "primaryFields": [
-                [
-                    "key": "staffName",
-                    "label": "Usuario",
-                    "value": staffName
-                ]
-            ]
-        ]
-        
-        print("Parameters sent to server: \(parameters)")
-        
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: parameters, options: []) else {
-            print("Error: invalid JSON data")
-            isRequestSuccessful = false
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = jsonData
-        
-        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
-            if let error = error {
-                print("Error: \(error.localizedDescription)")
-                DispatchQueue.main.async {
-                    self?.isRequestSuccessful = false
-                }
-                return
-            }
-            
-            if let response = response as? HTTPURLResponse {
-                print("Response status code: \(response.statusCode)")
-                DispatchQueue.main.async {
-                    self?.isRequestSuccessful = (200...299).contains(response.statusCode)
-                }
-            }
-            
-            if let data = data {
-                // Imprime la respuesta del servidor para depuración
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("Response: \(responseString)")
-                }
-            }
-        }.resume()
     }
 
 }

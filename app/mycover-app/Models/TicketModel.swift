@@ -13,23 +13,12 @@ struct TicketModel: Identifiable {
     let eventID: UUID
     let title: String
     let headline: String
+    let name: String
 //    let direction: String
 //    let coordinates: CLLocationCoordinate2D
 //    let acquisitionDate: Date
     
-    // Genera el token en formato de cadena
-    func generateTicketString() -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        // let dateStr = formatter.string(from: acquisitionDate)
-        
-        // Formato mejorado con todos los detalles y coordenadas desglosadas
-        return """
-        Title: \(title)
-        Headline: \(headline)
-        """
-    }
+    
 }
 
 

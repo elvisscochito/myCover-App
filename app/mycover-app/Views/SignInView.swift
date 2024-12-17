@@ -6,7 +6,7 @@ struct SignInView: View {
     @State private var password = ""
     @State private var showAlert = false
     @State private var alertMessage = ""
-    @ObservedObject var viewModel: TicketViewModel // Usamos el ViewModel
+    @EnvironmentObject var viewModel: TicketViewModel // Usamos el ViewModel
 
     var body: some View {
         if isSignIn || viewModel.isLoggedIn {
@@ -59,6 +59,7 @@ struct SignInView: View {
 }
 
 #Preview {
-    SignInView(viewModel: TicketViewModel())
-        .preferredColorScheme(.dark)
+    SignInView()
+        .environmentObject(TicketViewModel())
+    
 }

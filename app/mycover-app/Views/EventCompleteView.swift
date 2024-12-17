@@ -17,9 +17,11 @@ import SwiftUI
 
 struct EventCompleteView: View {
     let evento: EventModel
-    @ObservedObject var ticketsVM: TicketViewModel
+    @EnvironmentObject var ticketsVM: TicketViewModel
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = ""
+    @State private var buyed: Bool = false
+    
     
     
     var body: some View {
@@ -39,7 +41,10 @@ struct EventCompleteView: View {
             
             // Botón para crear el token
             Button(action: {
-                ticketsVM.postTicketreturnable(description: "routes", value: "staffName")
+                ticketsVM.postData(description: evento.headline, label: evento.title)
+                ticketsVM.createTicket(for: evento)
+                print(ticketsVM.getArrTickets())
+                buyed = true
                 
                 
                  // Crea el token y lo agrega a arrTokens
@@ -55,6 +60,15 @@ struct EventCompleteView: View {
             .alert(isPresented: $showAlert) {
                         Alert(title: Text("Información"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
                     }
+            if ((ticketsVM.isPassURLNil == false) && (buyed)) {
+                            Button("Agregar a Wallet") {
+                                ticketsVM.addPassToWallet()
+                            }
+                        }
+            
+            
+            
+            
         }
         .navigationTitle(evento.title)
         .preferredColorScheme(.dark)

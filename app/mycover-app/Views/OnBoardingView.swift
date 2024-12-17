@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct OnBoardingView: View {
-    @StateObject private var viewModel = TicketViewModel()
+    @EnvironmentObject var ticketsVM: TicketViewModel  //usar EnvironmentObject sin iniciar "()"
     @State private var isOnBoardingFinish = false
     @State private var currentPageIndex = 0
     
@@ -10,7 +10,8 @@ struct OnBoardingView: View {
     var body: some View {
         ZStack {
             if isOnBoardingFinish {
-                SignInView(viewModel: viewModel)
+                SignInView()
+                    .environmentObject(ticketsVM)
             } else {
                 VStack{
                     
@@ -18,6 +19,7 @@ struct OnBoardingView: View {
                         ForEach(pages.indices, id: \.self) { index in
                             PageView(page: pages[index])
                                 .tag(index)
+                                .environmentObject(ticketsVM)
                         }
                     }
                     
@@ -63,6 +65,9 @@ struct OnBoardingView: View {
     }
 }
 
+
+
 #Preview {
     OnBoardingView()
+        .environmentObject(TicketViewModel()) // Proveer una instancia válida
 }

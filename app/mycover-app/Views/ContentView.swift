@@ -1,50 +1,41 @@
 import SwiftUI
 
 struct ContentView: View {
-    // init ViewModel
     @StateObject private var ticketsVM = TicketViewModel()
     @State private var navigateToHome = false
-    
-
+    @AppStorage("username") var username: String = "Invitado"
     
     var body: some View {
         NavigationStack {
             ZStack {
                 if navigateToHome {
-                    
-                    if ticketsVM.isLoggedIn{
+                    if ticketsVM.isLoggedIn {
                         TabBarView()
-                    }else {
+                            .environmentObject(ticketsVM) // Proveer el ViewModel
+                    } else {
                         OnBoardingView()
+                            .environmentObject(ticketsVM) // Proveer el ViewModel
                     }
-                    
                 } else {
                     ZStack {
-                        // set the background to black
                         Color.black
-                                                    .ignoresSafeArea()
-                        // make sure that the "AppIconImage" is the right name of the asset
+                            .ignoresSafeArea()
                         Image("Icon")
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .frame(width: 100, height: 100)
-                
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 160, height: 160)
                     }
                     .onAppear {
-                        // navigate to OnBoardingView after 2 seconds
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                             navigateToHome = true
                         }
                     }
                 }
             }
-        }.onAppear {
-            UserDefaults.standard.set("Joel", forKey: "UserName")
         }
+        .environmentObject(ticketsVM) // Proveer el ViewModel globalmente
     }
-        
 }
-
 
 #Preview {
     ContentView()

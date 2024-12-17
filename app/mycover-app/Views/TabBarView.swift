@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct TabBarView: View {
+    @EnvironmentObject var ticketsVM: TicketViewModel
 
     var body: some View {
         TabView {
@@ -8,6 +9,7 @@ struct TabBarView: View {
             NavigationView {
                 Home()
                     .navigationTitle("Home")
+                    .environmentObject(ticketsVM)
             }
             .tabItem {
                 Image(systemName: "house.fill")
@@ -27,6 +29,7 @@ struct TabBarView: View {
             NavigationView {
                 WalletView()
                     .navigationTitle("Wallet")
+                    .environmentObject(ticketsVM)
             }
             .tabItem {
                 Image(systemName: "ticket.fill")
@@ -35,8 +38,9 @@ struct TabBarView: View {
             
             // Tercera pestaña: Profile
             NavigationView {
-                Test()
+                ProfileView()
                     .navigationTitle("Profile")
+                    .environmentObject(ticketsVM)
             }
             .tabItem {
                 Image(systemName: "person.fill")
