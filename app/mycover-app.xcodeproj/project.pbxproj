@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		5D5BBEBD2D14F4C200162347 /* Product.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 5D5BBEBB2D14F4C200162347 /* Product.storekit */; };
+		5D5BBEBE2D14F4C200162347 /* ProductList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5D5BBEBC2D14F4C200162347 /* ProductList.plist */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		FB11E0DC2CC8817A00B0E811 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,6 +29,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5D5BBEBB2D14F4C200162347 /* Product.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Product.storekit; sourceTree = "<group>"; };
+		5D5BBEBC2D14F4C200162347 /* ProductList.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ProductList.plist; sourceTree = "<group>"; };
 		FB11E0CB2CC8817700B0E811 /* mycover-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "mycover-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB11E0DB2CC8817A00B0E811 /* mycover-appTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "mycover-appTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB11E0E52CC8817A00B0E811 /* mycover-appUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "mycover-appUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -88,6 +95,8 @@
 		FB11E0C22CC8817700B0E811 = {
 			isa = PBXGroup;
 			children = (
+				5D5BBEBB2D14F4C200162347 /* Product.storekit */,
+				5D5BBEBC2D14F4C200162347 /* ProductList.plist */,
 				FB11E0CD2CC8817700B0E811 /* mycover-app */,
 				FB11E0DE2CC8817A00B0E811 /* mycover-appTests */,
 				FB11E0E82CC8817A00B0E811 /* mycover-appUITests */,
@@ -225,6 +234,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D5BBEBD2D14F4C200162347 /* Product.storekit in Resources */,
+				5D5BBEBE2D14F4C200162347 /* ProductList.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
