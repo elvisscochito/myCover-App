@@ -2,79 +2,6 @@ import SwiftUI
 import AuthenticationServices
 
 
-struct AppleSignInIconButton: View {
-    var onCompletion: (Result<ASAuthorization, Error>) -> Void
-    @State private var signInDelegate: SignInWithAppleDelegate? = nil
-    @State private var presentationProvider: PresentationAnchorProvider? = nil
-
-    var body: some View {
-        Button(action: {
-            startSignInWithAppleFlow()
-        }) {
-            Image(systemName: "applelogo") // SF Symbol del ícono de Apple
-                .resizable()
-                .scaledToFit()
-                .frame(width: 40, height: 40) // Ajusta el tamaño del ícono
-                .foregroundColor(.white) // Color del ícono
-                .padding(10)
-                .background(
-                    RoundedRectangle(cornerRadius: 15) // Cambia el cornerRadius para ajustar la redondez
-                        .fill(Color.black) // Color de fondo
-                )
-        }
-    }
-
-    private func startSignInWithAppleFlow() {
-        let provider = ASAuthorizationAppleIDProvider()
-        let request = provider.createRequest()
-        request.requestedScopes = [.fullName, .email]
-
-        let signInDelegate = SignInWithAppleDelegate(onCompletion: onCompletion)
-        let presentationProvider = PresentationAnchorProvider()
-        self.signInDelegate = signInDelegate // Mantener una referencia fuerte
-        self.presentationProvider = presentationProvider // Mantener una referencia fuerte
-
-        let controller = ASAuthorizationController(authorizationRequests: [request])
-        controller.delegate = signInDelegate
-        controller.presentationContextProvider = presentationProvider
-        controller.performRequests()
-    }
-
-    private class SignInWithAppleDelegate: NSObject, ASAuthorizationControllerDelegate {
-        let onCompletion: (Result<ASAuthorization, Error>) -> Void
-
-        init(onCompletion: @escaping (Result<ASAuthorization, Error>) -> Void) {
-            self.onCompletion = onCompletion
-        }
-
-        func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-            if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-                let email = appleIDCredential.email ?? "No email provided"
-                let fullName = appleIDCredential.fullName?.formatted() ?? "No name provided"
-
-                // Guardar en UserDefaults
-                UserDefaults.standard.set(email, forKey: "userEmail")
-                UserDefaults.standard.set(fullName, forKey: "userFullName")
-
-                print("Email: \(email), Full Name: \(fullName)")
-                onCompletion(.success(authorization))
-            }
-        }
-
-        func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-            print("Error during Apple Sign In: \(error.localizedDescription)")
-            onCompletion(.failure(error))
-        }
-    }
-
-    private class PresentationAnchorProvider: NSObject, ASAuthorizationControllerPresentationContextProviding {
-        func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-            UIApplication.shared.connectedScenes
-                .compactMap { $0 as? UIWindowScene }
-                .first?.windows.first { $0.isKeyWindow } ?? UIWindow()
-        }
-    }
-}
 
 
 struct SignInView: View {
@@ -84,10 +11,22 @@ struct SignInView: View {
     @State private var showAlert = false
     @State private var alertMessage = ""
     @EnvironmentObject var viewModel: TicketViewModel // Usamos el ViewModel
+    
+    // Referencias necesarias para el flujo de SignIn con Apple
+    @State private var signInDelegate: SignInWithAppleDelegate? = nil
+    @State private var presentationProvider: PresentationAnchorProvider? = nil
 
     var body: some View {
         if isSignIn || viewModel.isLoggedIn {
                 TabBarView() // Mostrar la vista principal si el usuario está logueado
+                .onAppear {
+                    viewModel.getEvents()
+                    if let userFullName = UserDefaults.standard.string(forKey: "userFullName") {
+                                print("User Full Name: \(userFullName)")
+                            } else {
+                                print("No user full name found in UserDefaults.")
+                            }
+                }
         } else {
             VStack(spacing: 20) {
                 Text("Sign In")
@@ -140,17 +79,20 @@ struct SignInView: View {
                             ) // Fondo circular negro
                     }
                     
-                    AppleSignInIconButton { result in
-                        switch result {
-                        case .success(let authorization):
-                            print("Inicio de sesión exitoso: \(authorization)")
-                            isSignIn = true
-                            
-                        case .failure(let error):
-                            print("Error al iniciar sesión: \(error.localizedDescription)")
-                            alertMessage = "Error al iniciar sesión: \(error.localizedDescription)"
-                            showAlert = true
-                        }
+                
+                    Button(action: {
+                        startSignInWithAppleFlow()
+                    }) {
+                        Image(systemName: "applelogo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 40, height: 40)
+                            .foregroundColor(.white)
+                            .padding(10)
+                            .background(
+                                RoundedRectangle(cornerRadius: 15)
+                                    .fill(Color.black)
+                            )
                     }
                     .padding(.top, 10)
                     
@@ -196,10 +138,44 @@ struct SignInView: View {
             showAlert = true
         }
     }
+    
+    // Maneja el flujo de autenticación con Apple
+    private func startSignInWithAppleFlow() {
+        let provider = ASAuthorizationAppleIDProvider()
+        let request = provider.createRequest()
+        request.requestedScopes = [.fullName, .email]
+
+        let signInDelegate = SignInWithAppleDelegate { result in
+            handleAppleSignIn(result: result)
+        }
+        let presentationProvider = PresentationAnchorProvider()
+        self.signInDelegate = signInDelegate
+        self.presentationProvider = presentationProvider
+
+        let controller = ASAuthorizationController(authorizationRequests: [request])
+        controller.delegate = signInDelegate
+        controller.presentationContextProvider = presentationProvider
+        controller.performRequests()
+    }
+
+    private func handleAppleSignIn(result: Result<ASAuthorization, Error>) {
+        switch result {
+        case .success(let authorization):
+            print("Inicio de sesión exitoso: \(authorization)")
+            viewModel.registerLogin()
+            isSignIn = true
+        case .failure(let error):
+            print("Error al iniciar sesión: \(error.localizedDescription)")
+            alertMessage = "Error al iniciar sesión: \(error.localizedDescription)"
+            showAlert = true
+        }
+    }
 }
 
 #Preview {
     SignInView()
-        .environmentObject(TicketViewModel())
+        .environmentObject(TicketViewModel(
+            
+        ))
     
 }
