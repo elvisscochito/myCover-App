@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct EventCompleteView: View {
-    let evento: EventModel
+    var evento: EventModel
     @EnvironmentObject var ticketsVM: TicketViewModel
     @EnvironmentObject var storeKitManager: StoreKitManager
     @State private var showAlert: Bool = false
@@ -45,9 +45,24 @@ struct EventCompleteView: View {
                             // Compra exitosa
                             alertMessage = "Compra exitosa. Ahora puedes guardar el boleto en Wallet."
                             isPurchased = true
-                            ticketsVM.postData(description: evento.headline, label: evento.title)
+
+                            // Inicializar userFullName como opcional
+                            var userFullName: String?
+
+                            if let name = UserDefaults.standard.object(forKey: "userFullName") as? String {
+                                userFullName = name
+                                print("User Full Name: \(userFullName ?? "Unknown")")
+                            } else {
+                                print("No user full name found or it is not a String.")
+                            }
+
+                            // Usar un String específico de `evento` para el parámetro `label`
+                            let eventLabel = evento.headline // Cambia esto por la propiedad correcta de evento que sea un String
+
+                            ticketsVM.postData(description: evento.headline, label: eventLabel, us: userFullName ?? "Unknown User")
                             ticketsVM.createTicket(for: evento)
                         }
+
                     } catch {
                         // Mostrar mensaje de error
                         alertMessage = "Error: \(error.localizedDescription)"
@@ -82,7 +97,7 @@ struct EventCompleteView: View {
                 }
             }
         }
-        .onChange(of: ticketsVM.isPassURLNil) { newValue in
+        .onChange(of: ticketsVM.isPassURLNil) { _, newValue in
             if !newValue {
                 isLoading = false // Actualiza isLoading cuando isPassURLNil cambia a false
             }

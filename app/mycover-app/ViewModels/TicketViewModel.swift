@@ -15,7 +15,7 @@ class TicketViewModel: ObservableObject {
     
     @Published var username: String {
             didSet {
-                UserDefaults.standard.set(username, forKey: "username")
+                UserDefaults.standard.set(username, forKey: "userFullName")
             }
         }
     
@@ -48,7 +48,7 @@ class TicketViewModel: ObservableObject {
         
         
         
-        self.username = UserDefaults.standard.string(forKey: "username") ?? "Invitado"
+        self.username = UserDefaults.standard.string(forKey: "userFullName") ?? "Invitado"
         checkLoginStatus()
             if isLoggedIn {
                 getEvents()
@@ -125,7 +125,7 @@ class TicketViewModel: ObservableObject {
    
 
     
-    func postData(description: String, label: String) {
+    func postData(description: String, label: String, us: String) {
         guard let url = URL(string: "https://app-o3i3ueqa6a-uc.a.run.app/api/postTicket") else {
             print("URL inválida")
             return
@@ -138,7 +138,7 @@ class TicketViewModel: ObservableObject {
                 [
                     "key": "staffName",
                     "label": label ,
-                    "value": username
+                    "value": us
                 ]
             ]
         ]
