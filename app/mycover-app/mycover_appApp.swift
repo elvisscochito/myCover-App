@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import StoreKit
+
 
 @main
 struct MyCoverApp: App {
     @StateObject private var ticketsVM = TicketViewModel()
     @StateObject private var storeKitManager = StoreKitManager()
-    
+
     
     var body: some Scene {
         WindowGroup {

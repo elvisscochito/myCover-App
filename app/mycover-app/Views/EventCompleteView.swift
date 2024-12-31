@@ -36,7 +36,7 @@ struct EventCompleteView: View {
                     isLoading = true
                     do {
                         // Intentar comprar el boleto
-                        guard let product = storeKitManager.storeProducts.first(where: { $0.id == "com.cover.boleto.vip" }) else {
+                        guard let product = storeKitManager.storeProducts.first(where: { $0.id == "com.cover.boleto.basico" }) else {
                             throw StoreError.failedVerification
                         }
                         let transaction = try await storeKitManager.purchase(product)
