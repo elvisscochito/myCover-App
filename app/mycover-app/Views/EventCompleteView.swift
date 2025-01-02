@@ -36,8 +36,13 @@ struct EventCompleteView: View {
                     isLoading = true
                     do {
                         // Intentar comprar el boleto
-                        guard let product = storeKitManager.storeProducts.first(where: { $0.id == "com.cover.boleto.vip" }) else {
+                        guard let product = storeKitManager.storeProducts.first(where: { $0.id == "com.cover.boleto.vip"
+                                
+                        }) else {
+                            log(String(describing: StoreError.failedVerification))
                             throw StoreError.failedVerification
+                            
+
                         }
                         let transaction = try await storeKitManager.purchase(product)
                         
@@ -45,6 +50,7 @@ struct EventCompleteView: View {
                             // Compra exitosa
                             alertMessage = "Compra exitosa. Ahora puedes guardar el boleto en Wallet."
                             isPurchased = true
+                            log(alertMessage)
 
                             // Inicializar userFullName como opcional
                             var userFullName: String?
@@ -52,8 +58,10 @@ struct EventCompleteView: View {
                             if let name = UserDefaults.standard.object(forKey: "userFullName") as? String {
                                 userFullName = name
                                 print("User Full Name: \(userFullName ?? "Unknown")")
+                                log("User Full Name: \(userFullName ?? "Unknown")")
                             } else {
                                 print("No user full name found or it is not a String.")
+                                log("No user full name found or it is not a String.")
                             }
 
                             // Usar un String específico de `evento` para el parámetro `label`
@@ -66,6 +74,7 @@ struct EventCompleteView: View {
                     } catch {
                         // Mostrar mensaje de error
                         alertMessage = "Error: \(error.localizedDescription)"
+                        log(alertMessage)
                     }
                     showAlert = true
                 }
@@ -94,6 +103,7 @@ struct EventCompleteView: View {
                 .disabled(ticketsVM.isPassURLNil)
                 .alert(isPresented: $showAlert) {
                     Alert(title: Text("Atención"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                    
                 }
             }
         }
@@ -109,6 +119,13 @@ struct EventCompleteView: View {
     // Función para guardar en la billetera
     func saveToWallet() {
         alertMessage = "¡Boleto guardado en Wallet exitosamente!"
+        log(alertMessage)
         showAlert = true
+    }
+    
+    // Función para registrar logs
+    private func log(_ message: String) {
+        print("[EventCompleteView] \(message)")
+        storeKitManager.logHandler?("[EventCompleteView] \(message)")
     }
 }

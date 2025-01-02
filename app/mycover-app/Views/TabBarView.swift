@@ -2,6 +2,7 @@ import SwiftUI
 
 struct TabBarView: View {
     @EnvironmentObject var ticketsVM: TicketViewModel
+    @EnvironmentObject var storeKitManager: StoreKitManager
 
     var body: some View {
         TabView {
@@ -41,6 +42,14 @@ struct TabBarView: View {
                 ProfileView()
                     .navigationTitle("Profile")
                     .environmentObject(ticketsVM)
+                    .onAppear {
+                            // Solo configura el logHandler si es necesario, evitando duplicados.
+                            if storeKitManager.logHandler == nil {
+                                storeKitManager.logHandler = { logMessage in
+                                    print("[ProfileView Log] \(logMessage)")
+                                }
+                            }
+                        }
             }
             .tabItem {
                 Image(systemName: "person.fill")
@@ -51,6 +60,4 @@ struct TabBarView: View {
     }
 }
 
-#Preview {
-    TabBarView()
-}
+
